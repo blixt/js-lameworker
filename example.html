@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LAME</title>
+	</head>
+	<body>
+		<p>You can find the source code for this project here:
+		<a href="https://github.com/blixt/js-lameworker">https://github.com/blixt/js-lameworker</a></p>
+		<p><button onclick="record(this)">Record 5 sec</button></p>
+		<p><strong>Recorded MP3 snippets:</strong></p>
+		<ul id="mp3s"></ul>
+		<script src="lame.js"></script>
+		<script>
+		var lame = lameworker();
+		lame.getVersion(function (error, version) {
+			console.log('LAME version:', version);
+		});
+
+		// Global variable to keep track of the LAME context handle.
+		var LAME_HANDLE;
+
+		// Initializes LAME so that we can record.
+		function initialize() {
+			lame.init(function (error, handle) {
+				if (error || handle <= 0) {
+					console.error('LAME error:', error || handle);
+					return;
+				}
+				// These are all asynchronous but order is guaranteed.
+				lame.setMode(handle, lameworker.MONO);
+				lame.setNumChannels(handle, 1);
+				lame.setInSampleRate(handle, 44100);
+				lame.setOutSampleRate(handle, 44100);
+				lame.setBitrate(handle, 128);
+				lame.initParams(handle);
+				// Keep track of the handle.
+				LAME_HANDLE = handle;
+			});
+		}
+
+		// This function finalizes LAME output and saves the MP3 data to a file.
+		function getMP3(buffers, callback) {
+			// Get the remaining data out of LAME before closing the session.
+			lame.encodeFlush(LAME_HANDLE, function (error, buffer) {
+				// Merge all buffers into a Blob.
+				buffers.push(buffer);
+				var blob = new Blob(buffers, {type: 'audio/mp3'});
+				callback(blob);
+			});
+			lame.close(LAME_HANDLE);
+			LAME_HANDLE = null;
+		}
+
+		// Adds an MP3 blob to the page for download.
+		function displayMP3(blob) {
+			var item = document.createElement('li');
+			// Create an URL for the Blob instance. This can be used for <audio> tags as well.
+			var url = URL.createObjectURL(blob);
+			item.innerHTML = '<a download="audio.mp3" href="' + url + '">' + new Date() + '</a>';
+			document.getElementById('mp3s').appendChild(item);
+		}
+
+		// Function that handles getting audio out of the browser's media API.
+		function beginRecording(stream) {
+			// Initialize a LAME session.
+			initialize();
+			// Set up Web Audio API to process data from the media stream (microphone).
+			var context = new AudioContext();
+			var microphone = context.createMediaStreamSource(stream);
+			var processor = context.createScriptProcessor(0, 1, 1);
+			// Add all buffers from LAME into an array.
+			var buffers = [];
+			processor.onaudioprocess = function (event) {
+				// Send microphone data to LAME for MP3 encoding while recording.
+				var array = event.inputBuffer.getChannelData(0);
+				lame.encodeBuffer(LAME_HANDLE, array, array, function (error, buffer) {
+					buffers.push(buffer);
+				});
+			};
+			// Begin retrieving microphone data.
+			microphone.connect(processor);
+			processor.connect(context.destination);
+			// Return a function which will stop recording and return all MP3 data.
+			return function stopRecording() {
+				// Clean up the Web Audio API resources.
+				if (context.close) context.close();
+				microphone.disconnect();
+				processor.disconnect();
+				processor.onaudioprocess = null;
+				// Return the buffers array. Note that there may be more buffers pending here.
+				return buffers;
+			};
+		}
+
+		// Function for kicking off recording once the button is pressed.
+		function record(button) {
+			button.disabled = true;
+			button.textContent = 'Allow recording';
+			// Request access to the microphone.
+			navigator.getUserMedia({audio: true}, function (stream) {
+				// Begin recording and get a function that stops the recording.
+				var stopRecording = beginRecording(stream);
+				// Start counting down to 0.
+				var start = +new Date();
+				button.textContent = 'Recording... 5.0';
+				// Run a function every 100 ms to update the UI and dispose it after 5 seconds.
+				var timer = setInterval(function () {
+					var duration = new Date() - start;
+					if (duration < 5000) {
+						button.textContent = 'Recording... ' + ((5000 - duration) / 1000).toFixed(1);
+					} else {
+						// We hit 0, so stop recording and save the audio data as MP3.
+						var buffers = stopRecording();
+						getMP3(buffers, displayMP3);
+						// Reset the state of the UI.
+						clearInterval(timer);
+						button.textContent = 'Done! Again?';
+						button.disabled = false;
+					}
+				}, 100);
+			}, function (error) {
+				button.disabled = false;
+				button.textContent = 'Error! Try again.';
+			});
+		}
+
+		// Ensure that navigator.getUserMedia is available.
+		navigator.getUserMedia = navigator.getUserMedia ||
+		                         navigator.webkitGetUserMedia ||
+		                         navigator.mozGetUserMedia ||
+		                         navigator.msGetUserMedia;
+		</script>
+	</body>
+</html>
