@@ -40,6 +40,17 @@ lame.getVersion(function (error, version) {
 You can find the stand-alone worker file as `dist/lame.worker.js` in this package.
 
 
+TODO
+----
+
+There are some obvious improvements to be done still:
+
+1. Keep buffers within the Web Worker and only send back a `Blob` instance once the encoding is complete
+2. Simpler API with a helper on the main thread side to make encoding MP3 just a couple of API calls
+3. When the main thread sends data to the Web Worker, transfer the buffer instead of cloning it
+4. More? Please add issues to this repository!
+
+
 Building
 --------
 
