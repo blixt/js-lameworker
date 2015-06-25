@@ -22,6 +22,24 @@ lame.getVersion(function (error, version) {
 See `dist/example.html` for a full example.
 
 
+### Using with Browserify etc.
+
+If you're using a toolchain that simulates a CommonJS environment, you can import this package instead of using the global from `dist/lame.js`:
+
+```javascript
+var lameworker = require('lameworker');
+
+// Note that you still need to refer to a stand-alone worker file.
+var lame = lameworker('/static/lame.worker.js');
+
+lame.getVersion(function (error, version) {
+  console.log('Using LAME v' + version);
+});
+```
+
+You can find the stand-alone worker file as `dist/lame.worker.js` in this package.
+
+
 Building
 --------
 

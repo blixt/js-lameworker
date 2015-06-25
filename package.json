@@ -7,9 +7,9 @@
     "ws": false
   },
   "files": [
-    "lib/lame.js",
-    "index.js",
-    "worker.js"
+    "dist/lame.js",
+    "dist/lame.worker.js",
+    "index.js"
   ],
   "scripts": {
     "prepublish": "make",
