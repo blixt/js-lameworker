@@ -1,7 +1,7 @@
 LAME worker
 ===========
 
-Package for running LAME in a Web Worker. LAME makes it easy to encode and decode MP3 files. See `dist/example.html` for a fully working example.
+Package for running LAME in a Web Worker. LAME makes it easy to encode and decode MP3 files. See [`example.html`](http://blixt.nyc/js-lameworker/example.html) for an example that records audio from the microphone and encodes it as MP3 in real-time, then lets the user download it.
 
 
 Example
