@@ -1,0 +1,35 @@
+{
+  "name": "lameworker",
+  "version": "0.1.0",
+  "description": "Package for running LAME MP3 in a Web Worker.",
+  "main": "index.js",
+  "browser": {
+    "ws": false
+  },
+  "files": [
+    "lib/lame.js",
+    "index.js",
+    "worker.js"
+  ],
+  "scripts": {
+    "prepublish": "make",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blixt/js-lameworker.git"
+  },
+  "author": "Blixt <me@blixt.nyc>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blixt/js-lameworker/issues"
+  },
+  "dependencies": {
+    "workerproxy": "^0.3.3"
+  },
+  "devDependencies": {
+    "browserify": "^10.2.4",
+    "derequire": "^2.0.0",
+    "google-closure-compiler": "^20150609.0.0"
+  }
+}
