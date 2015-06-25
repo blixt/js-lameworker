@@ -5,7 +5,33 @@ function lameworker(opt_workerPath) {
   var worker = new Worker(opt_workerPath);
   return workerproxy(worker, {functionNames: [
     'getVersion',
-    'init'
+    'init',
+    'initParams',
+    'close',
+    'getMode',
+    'setMode',
+    'getNumSamples',
+    'setNumSamples',
+    'getNumChannels',
+    'setNumChannels',
+    'getInSampleRate',
+    'setInSampleRate',
+    'getOutSampleRate',
+    'setOutSampleRate',
+    'getBitrate',
+    'setBitrate',
+    'getVariableBitrate',
+    'setVariableBitrate',
+    'getVariableBitrateQuality',
+    'setVariableBitrateQuality',
+    'getVariableBitrateMean',
+    'setVariableBitrateMean',
+    'getVariableBitrateMin',
+    'setVariableBitrateMin',
+    'getVariableBitrateMax',
+    'setVariableBitrateMax',
+    'encodeBuffer',
+    'encodeFlush'
   ]});
 }
 
