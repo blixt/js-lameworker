@@ -1,0 +1,32 @@
+{
+  "name": "lameworker",
+  "homepage": "https://github.com/blixt/js-lameworker",
+  "authors": [
+    "Blixt <me@blixt.nyc>"
+  ],
+  "description": "Easy to use LAME bindings via a Web Worker.",
+  "main": "dist/lame.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "lame",
+    "mp3"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "Makefile",
+    "dist/example.html",
+    "index.js",
+    "lame-3.99.5",
+    "lame-3.99.5.tar.gz",
+    "libmp3lame.js",
+    "node_modules",
+    "package.json",
+    "post.js",
+    "pre.js",
+    "worker.js"
+  ]
+}
