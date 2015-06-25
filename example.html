@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
 		<title>LAME</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 	</head>
 	<body>
-		<p>You can find the source code for this project here:
-		<a href="https://github.com/blixt/js-lameworker">https://github.com/blixt/js-lameworker</a></p>
-		<p><button onclick="record(this)">Record 5 sec</button></p>
-		<p><strong>Recorded MP3 snippets:</strong></p>
-		<ul id="mp3s"></ul>
+		<div class="container">
+			<div class="page-header">
+				<h1>LAME Worker Example</h1>
+				<p class="lead">Example that records a snippet of audio from your microphone and encodes it as MP3 in real time.</p>
+			</div>
+			<h3>Source code</h3>
+			<p>
+				You can find the source code for this project here:
+				<a href="https://github.com/blixt/js-lameworker">https://github.com/blixt/js-lameworker</a>
+			</p>
+			<h3>Demo</h3>
+			<p>Click the button below to record a five second snippet from your microphone. Note that you need to allow access to your microphone.</p>
+			<p><button class="btn btn-danger btn-lg" onclick="record(this)">Record 5 sec</button></p>
+			<h3>Recorded MP3 snippets</h3>
+			<p>Once you've recorded something, a link to download it as an MP3 file will appear below.</p>
+			<ul id="mp3s"></ul>
+		</div>
 		<script src="lame.js"></script>
 		<script>
 		var lame = lameworker();
