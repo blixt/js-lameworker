@@ -60,7 +60,7 @@ $(LAME): $(LAME).tar.gz
 $(LAME).tar.gz:
 	test -e "$@" || wget $(LAME_URL)
 
-node_modules:
+node_modules: package.json
 	npm install
 
 clean:
@@ -69,5 +69,6 @@ clean:
 
 distclean: clean
 	$(RM) $(LAME).tar.gz
+	$(RM) node_modules
 
 .PHONY: clean distclean

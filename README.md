@@ -107,3 +107,5 @@ Building
 --------
 
 Make sure you have Emscripten set up on your system, then run `make`.
+
+*Note*: For the worker file to work properly, you may need Emscripten including this pull request: https://github.com/kripken/emscripten/pull/3577

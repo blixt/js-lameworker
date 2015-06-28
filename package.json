@@ -12,7 +12,6 @@
     "index.js"
   ],
   "scripts": {
-    "prepublish": "make",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
