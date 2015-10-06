@@ -75,6 +75,22 @@ workerproxy({
     lame._free(ptrOut);
   },
 
+  encodeBufferMono: function (handle, array, callback) {
+    var ptrOut = lame._malloc(BUFFER_SIZE);
+    var ptrData = lame._malloc(array.length * 4);
+    for (var i = 0; i < array.length; i++) {
+      lame.setValue(ptrData + (i * 4), array[i], 'float');
+    }
+    var bytes = lame.ccall('lame_encode_buffer_ieee_float', 'number', ['number', 'number', 'number', 'number', 'number', 'number'], [handle, ptrData, ptrData, array.length, ptrOut, BUFFER_SIZE]);
+    lame._free(ptrData);
+    if (bytes < 0) {
+      lame._free(ptrOut);
+      throw new Error('LAME reported error: ' + bytes);
+    }
+    transferMemory(ptrOut, bytes, callback);
+    lame._free(ptrOut);
+  },
+
   encodeFlush: function (handle, callback) {
     var ptrOut = lame._malloc(BUFFER_SIZE);
     var bytes = lame.ccall('lame_encode_flush', 'number', ['number', 'number', 'number'], [handle, ptrOut, BUFFER_SIZE]);

@@ -83,13 +83,13 @@
 			initialize();
 			// Set up Web Audio API to process data from the media stream (microphone).
 			var microphone = context.createMediaStreamSource(stream);
-			var processor = context.createScriptProcessor(2048, 1, 1);
+			var processor = context.createScriptProcessor(16384, 1, 1);
 			// Add all buffers from LAME into an array.
 			var buffers = [];
 			processor.onaudioprocess = function (event) {
 				// Send microphone data to LAME for MP3 encoding while recording.
 				var array = event.inputBuffer.getChannelData(0);
-				lame.encodeBuffer(LAME_HANDLE, array, array, function (error, buffer) {
+				lame.encodeBufferMono(LAME_HANDLE, array, function (error, buffer) {
 					buffers.push(buffer);
 				});
 			};
