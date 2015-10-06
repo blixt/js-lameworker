@@ -30,7 +30,7 @@ EMCC_EXPORTED_FUNCTIONS:=[\
 '_lame_get_VBR_min_bitrate_kbps', '_lame_set_VBR_min_bitrate_kbps',\
 '_lame_get_VBR_q', '_lame_set_VBR_q',\
 '_lame_init', '_lame_init_params']
-EMCC_OPTIONS:=-O3 --closure 0 --memory-init-file 0 -s LINKABLE=1 -s CLOSURE_COMPILER=1 -s EXPORTED_FUNCTIONS="$(EMCC_EXPORTED_FUNCTIONS)"
+EMCC_OPTIONS:=-O3 --closure 0 --memory-init-file 0 -s NO_FILESYSTEM=1 -s NO_BROWSER=1 -s LINKABLE=1 -s USE_CLOSURE_COMPILER=1 -s EXPORTED_FUNCTIONS="$(EMCC_EXPORTED_FUNCTIONS)"
 EMCONFIGURE:=emconfigure
 EMMAKE:=emmake
 
@@ -69,6 +69,6 @@ clean:
 
 distclean: clean
 	$(RM) $(LAME).tar.gz
-	$(RM) node_modules
+	$(RM) -r node_modules
 
 .PHONY: clean distclean

@@ -27,8 +27,8 @@
     "workerproxy": "^0.3.3"
   },
   "devDependencies": {
-    "browserify": "^10.2.4",
+    "browserify": "^11.2.0",
     "derequire": "^2.0.0",
-    "google-closure-compiler": "^20150609.0.0"
+    "google-closure-compiler": "^20150920.0.0"
   }
 }

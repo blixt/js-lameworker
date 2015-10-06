@@ -34,6 +34,9 @@
 		// Global variable to keep track of the LAME context handle.
 		var LAME_HANDLE;
 
+		// Get an audio context for the Web Audio API.
+		var context = new AudioContext();
+
 		// Initializes LAME so that we can record.
 		function initialize() {
 			lame.init(function (error, handle) {
@@ -44,9 +47,8 @@
 				// These are all asynchronous but order is guaranteed.
 				lame.setMode(handle, lameworker.MONO);
 				lame.setNumChannels(handle, 1);
-				lame.setInSampleRate(handle, 44100);
+				lame.setInSampleRate(handle, context.sampleRate); // Note that sample rates may vary
 				lame.setOutSampleRate(handle, 44100);
-				lame.setBitrate(handle, 128);
 				lame.initParams(handle);
 				// Keep track of the handle.
 				LAME_HANDLE = handle;
@@ -80,9 +82,8 @@
 			// Initialize a LAME session.
 			initialize();
 			// Set up Web Audio API to process data from the media stream (microphone).
-			var context = new AudioContext();
 			var microphone = context.createMediaStreamSource(stream);
-			var processor = context.createScriptProcessor(0, 1, 1);
+			var processor = context.createScriptProcessor(2048, 1, 1);
 			// Add all buffers from LAME into an array.
 			var buffers = [];
 			processor.onaudioprocess = function (event) {
@@ -98,7 +99,6 @@
 			// Return a function which will stop recording and return all MP3 data.
 			return function stopRecording() {
 				// Clean up the Web Audio API resources.
-				if (context.close) context.close();
 				microphone.disconnect();
 				processor.disconnect();
 				processor.onaudioprocess = null;
